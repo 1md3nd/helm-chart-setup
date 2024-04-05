@@ -4,30 +4,57 @@
 
 # here we use naming convention for the values.yaml file to make it easier to understand the values
 # it will be used in the templates for each resource for different kubernetes objects
+
 backend:
-  image:
-    name: anmol040/node-backend
-    tag: 1.4
-    pullPolicy: Always
+  labelName: my-node-backend
+  # replicaCount if you want to scale the application
+  replicas: 2
+  # image repository and tag and pull policy for the application
+  imageName: "anmol040/node-backend"
+  tag: "1.4"
+  # pullPolicy defines the image pull policy Always, Latest or IfNotPresent.
+  imagePullPolicy: "Always"
+  containerPort: 5000
+
+  env:
+  - name: MONGO_URL
+    valueFrom:
+      secretKeyRef:
+        name: backend-secret
+        key: mongo-url
+
+  service:
+    name: my-node-backend-service
+    type: NodePort
+    nodePort: 30001
+
+  secret:
+    name: backend-secret
+    type: Opaque
+    mongo_url: bW9uZ29kYjovL3h5ejpSa2g2MGg5bVVZbzlOV0V4QGFjLXV1c3NuYjctc2hhcmQtMDAtMDAudXlkZGxzOC5tb25nb2RiLm5ldDoyNzAxNyxhYy11dXNzbmI3LXNoYXJkLTAwLTAxLnV5ZGRsczgubW9uZ29kYi5uZXQ6MjcwMTcsYWMtdXVzc25iNy1zaGFyZC0wMC0wMi51eWRkbHM4Lm1vbmdvZGIubmV0OjI3MDE3Lz9zc2w9dHJ1ZSZyZXBsaWNhU2V0PWF0bGFzLTE0NmE3Yy1zaGFyZC0wJmF1dGhTb3VyY2U9YWRtaW4mcmV0cnlXcml0ZXM9dHJ1ZSZ3PW1ham9yaXR5JmFwcE5hbWU9Q2x1c3RlcjAK
+  
 
 frontend:
-  imageName: anmol040/simple-react-app:1.5
-web:
+  labelName: my-react-app
   # replicaCount if you want to scale the application
-  replicaCount: 1
-
+  replicas: 2
   # image repository and tag and pull policy for the application
-  image:
-    repository: nginx
-    # pullPolicy defines the image pull policy Always, Latest or IfNotPresent.
-    pullPolicy: Latest
-    # Overrides the image tag whose default is the chart appVersion.
-    tag: ""
+  imageName: "anmol040/simple-react-app"
+  tag: "1.5"
+  # pullPolicy defines the image pull policy Always, Latest or IfNotPresent.
+  imagePullPolicy: "Always"
+  containerPort: 80
+
+  service:
+    name: my-react-app-service
+    type: NodePort
+    nodePort: 30000
+
+
 
   # Overrides the image pull secret
   # ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   # for private registry  
-  imagePullSecrets: []
 
 # nameOverrride and fullnameOverride for the application which will be used in the deployment
 nameOverride: "3tier-helm-demo"
@@ -42,7 +69,7 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: "adminServiceAccount"
+  name: "adminaccount"
 
 podAnnotations: {}
 podLabels: {}
@@ -59,9 +86,9 @@ securityContext: {}
   # runAsUser: 1000
 
 # used in minikube to expose the service
-service:
-  type: NodePort
-  port: 80
+# service:
+#   type: NodePort
+#   port: 80
 
 ingress:
   enabled: false
@@ -84,12 +111,12 @@ resources: {}
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits:
-    cpu: 100m
-    memory: 128Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
 
 # liverness and readiness probe for the application
 livenessProbe:
