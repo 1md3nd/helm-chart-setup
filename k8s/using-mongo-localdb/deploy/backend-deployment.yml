@@ -25,6 +25,6 @@ spec:
           env:
           - name: MONGO_URL
             valueFrom:
-              configMapKeyRef :
+              configMapKeyRef:
                 name: mongo-config
                 key: mongo-url
