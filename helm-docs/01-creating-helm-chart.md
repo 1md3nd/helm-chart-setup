@@ -69,12 +69,3 @@ How we have assigned the values for the frontend-deployment-template
 And here how I have associate the values of backend-deployment
 
 ![alt text](img-ref/image-helm-backend-values.png)
-
-
-
-## Installing helm 
-
-```
-```
-helm install 3tier 3tier-helm-demo -n 3tier
-```

@@ -12,10 +12,10 @@ This document outlines the reasons for transitioning from MongoDB Atlas, a manag
 - `Learning and Education:` Provide hands-on learning experience for developers and administrators to explore MongoDB features and administration tasks.
 
 ## Using mongodb-atlas
-![alt text](img-ref/image-mongo-atlas.png)
+![alt text](../img-ref/image-mongo-atlas.png)
 
 ## Using mongodb-localdb
-![alt text](img-ref/image-mongo-local.png)
+![alt text](../img-ref/image-mongo-local.png)
 ## Implementation Steps:
 
 Since we are using kubernetes to deploy our architecture so for this setup we are going to create a mongodb `mongo-deployment.yml`, `headless-service.yml`,`persistant-volume.yml` which will be responsible for our servers and connections.
